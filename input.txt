@@ -1,0 +1,19 @@
+c f
+d x
+d y
+a b
+a c
+q c
+q d
+a d
+b x
+b y
+b z
+d z
+x p
+y x
+z b1
+z f
+* *
+g
+h
