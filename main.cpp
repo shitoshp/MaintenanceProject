@@ -8,20 +8,21 @@ using namespace std;
 //function to take in each line of string and break it into two strings
 vector<string> breakdown(string x);
 
-struct node {
-	string module;
-	node* next;
-};
 
 int main() {
 	
 	string relation;
 	string first;
 	string second;
+    string transaction;
+    string def_module;
+    bool def_module_check = false;
 	bool end_of_data = false;
-	vector<node*> links;
+	//vector<node*> links;
 	vector<string> thisline;
+    map <string, vector<string>> submodules;
 	map <string, int> modules;
+    vector<vector<string>> path;
 
 	ifstream instream ("input.txt");
 
@@ -44,18 +45,28 @@ int main() {
 					//if module appears in second, add into map with value 2
 					modules[thisline[1]] = 2;
 					
-					cout << thisline[0] << " and " << thisline[1] << endl;
+                   submodules[thisline[0]].push_back(thisline[1]);
+
+
+					//cout << thisline[0] << " and " << thisline[1] << endl;
 				}
 			}
 			else {
-				cout << "End of data: " << relation << endl;
+				//cout << "End of data: " << relation << endl;
+                if (!def_module_check) {
+                    def_module = relation;
+                    def_module_check = true;
+                }
+                else {
+                    transaction = relation;
+                }
 			}
 
 		}
 		instream.close();
 	}
 
-	//printing unique modules from map with value 2
+	//printing unique modules from map with value 2, they are the unique modules
 	cout << "The unique modules are: ";
 	for (map<string, int>::iterator it = modules.begin(); it != modules.end(); ++it) {
 		if (it->second == 2) {
@@ -64,7 +75,7 @@ int main() {
 	}
 	cout << endl;
 
-	//printing transactions from map with value 1
+	//printing transactions from map with value 1, they are the transactions
 	cout << "The transactions are: ";
 	for (map<string, int>::iterator it = modules.begin(); it != modules.end(); ++it) {
 		if (it->second == 1) {
@@ -72,6 +83,27 @@ int main() {
 		}
 	}
 	cout << endl;
+
+    cout << "The given transaction is: " << transaction << endl;
+    cout << "The defective module is: " << def_module << endl;
+
+    for (map<string, vector<string>>::iterator it = submodules.begin(); it != submodules.end(); ++it) {
+        cout << it->first << ": ";
+        for (vector<string>::iterator vit = it->second.begin(); vit != it->second.end(); vit++) {
+            cout << *vit << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+
+    for (map<string, vector<string>>::iterator it = submodules.begin(); it != submodules.end(); ++it) {
+        if (it->first == transaction) {
+            for (vector<string>::iterator vit = it->second.begin(); vit != it->second.end(); vit++) {
+                cout << *vit << " ";
+            }
+        }
+        cout << endl;
+    }
 
 	system("pause");
     
